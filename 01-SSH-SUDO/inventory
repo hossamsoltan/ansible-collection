@@ -1,0 +1,9 @@
+[cluster]
+confluent1.test.local #ansible_ip=192.168.1.161   ansible_name=confluent1
+confluent2.test.local #ansible_ip=192.168.1.162   ansible_name=confluent2
+confluent3.test.local #ansible_ip=192.168.1.163   ansible_name=confluent3
+confluent4.test.local #ansible_ip=192.168.1.164   ansible_name=confluent4
+confluent5.test.local #ansible_ip=192.168.1.165   ansible_name=confluent5
+confluent6.test.local #ansible_ip=192.168.1.166   ansible_name=confluent6
+
+

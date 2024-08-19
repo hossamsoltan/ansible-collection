@@ -1,0 +1,40 @@
+---
+- name: Set up SSH key-based authentication, and grant passwordless sudo
+  hosts: cluster
+  become: yes   # to make the action with sudo
+  tasks:
+    - name: Ensure the .ssh directory exists on remote servers create it if not exist
+      become: no
+      file:
+        path: /home/{{ ansible_user }}/.ssh
+        state: directory
+        mode: '0700'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Create authorized_keys file if it doesn't exist
+      become: no
+      file:
+        path: /home/{{ ansible_user }}/.ssh/authorized_keys
+        state: touch
+        mode: '0600'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Copy the public key from the ansible controller to the remote server
+      become: no
+      copy:
+        src: /home/{{ ansible_user }}/.ssh/id_rsa.pub
+        dest: /home/{{ ansible_user }}/.ssh/authorized_keys
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0600'
+
+    - name: Grant passwordless sudo to the user
+      lineinfile:
+        path: /etc/sudoers
+        regexp: "^{{ ansible_user }} ALL="
+        line: "{{ ansible_user }} ALL=(ALL) NOPASSWD: ALL"
+        state: present
+
+
